@@ -2,7 +2,7 @@ package com.br.unicornlover.model;
 
 public class Unicorn {
 
-    private String _id = "";
+    private String _id = null;
     private String name = "";
     private int age = 0;
     private String colour = "";

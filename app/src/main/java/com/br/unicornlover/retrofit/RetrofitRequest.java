@@ -16,7 +16,7 @@ public class RetrofitRequest {
     @NonNull
     public static OkHttpClient client() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .addInterceptor(httpLoggingInterceptor)
                 .build();

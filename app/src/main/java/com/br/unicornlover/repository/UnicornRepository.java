@@ -95,12 +95,12 @@ public class UnicornRepository {
         api.createUnicorn(unicorn).enqueue(new Callback<Unicorn>() {
             @Override
             public void onResponse(@NonNull Call<Unicorn> call, @NonNull Response<Unicorn> response) {
-
+                //TODO fluxo do app
             }
 
             @Override
             public void onFailure(@NonNull Call<Unicorn> call, @NonNull Throwable t) {
-
+                //TODO fluxo do app
             }
         });
     }
