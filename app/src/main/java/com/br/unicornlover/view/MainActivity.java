@@ -14,19 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.br.unicornlover.R;
 import com.br.unicornlover.adapter.UnicornAdapter;
+import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.viewmodel.MainActivityViewModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements UnicornAdapter.Callback {
 
     private MainActivityViewModel viewModel;
     private UnicornAdapter adapter;
+    private final List<Unicorn> unicornsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         init();
         getUnicorns();
     }
@@ -43,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
             Intent intent = new Intent(this, CreateUnicornActivity.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.save_unicorn) {
-            //TODO save on room
+            viewModel.saveFile(unicornsList);
         }
         return true;
     }
@@ -61,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     private void getUnicorns() {
         viewModel.getUnicornsResponseLiveData().observe(this, unicorns -> {
             if (unicorns != null) {
+                unicornsList.addAll(unicorns);
                 adapter.update(unicorns);
             }
         });
