@@ -41,10 +41,6 @@ public class MainActivityViewModel extends AndroidViewModel {
         repository.deleteUnicorn(id);
     }
 
-    public void editUnicorn(String id) {
-
-    }
-
     public void saveFile(List<Unicorn> unicorns) {
         String jsonObject = new Gson().toJson(unicorns);
         try {

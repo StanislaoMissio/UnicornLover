@@ -83,7 +83,9 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
 
     @Override
     public void onEditClick(String id) {
-        viewModel.editUnicorn(id);
+        Intent intent = new Intent(this, EditUnicornActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 
     @Override

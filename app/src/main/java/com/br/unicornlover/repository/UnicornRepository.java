@@ -59,8 +59,8 @@ public class UnicornRepository {
         });
     }
 
-    public void editUnicorn(Unicorn unicorn) {
-        api.editUnicorn(unicorn).enqueue(new Callback<ResponseBody>() {
+    public void editUnicorn(String id, Unicorn unicorn) {
+        api.editUnicorn(id, unicorn).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
 

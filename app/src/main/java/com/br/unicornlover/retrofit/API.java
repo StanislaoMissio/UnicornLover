@@ -24,8 +24,8 @@ public interface API {
     @GET("unicorns/{id}")
     Call<Unicorn> getUnicorn(@Path("id") String id);
 
-    @PUT("unicorns")
-    Call<ResponseBody> editUnicorn(Unicorn unicorn);
+    @PUT("unicorns/{id}")
+    Call<ResponseBody> editUnicorn(@Path("id")String id, @Body Unicorn unicorn);
 
     @DELETE("unicorns/{id}")
     Call<ResponseBody> deleteUnicorn(@Path("id") String id);
