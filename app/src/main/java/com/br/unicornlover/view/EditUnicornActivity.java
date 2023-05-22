@@ -17,7 +17,6 @@ public class EditUnicornActivity extends AppCompatActivity {
     private EditText name;
     private EditText age;
     private EditText colour;
-    private Button submit;
     private EditUnicornViewModel viewModel;
 
     @Override
@@ -31,7 +30,7 @@ public class EditUnicornActivity extends AppCompatActivity {
         age = findViewById(R.id.age);
         colour = findViewById(R.id.colour);
 
-        submit = findViewById(R.id.submit);
+        Button submit = findViewById(R.id.submit);
 
         viewModel = new ViewModelProvider(this).get(EditUnicornViewModel.class);
 

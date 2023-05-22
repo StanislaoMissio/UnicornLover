@@ -8,9 +8,14 @@ import androidx.lifecycle.AndroidViewModel;
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.repository.UnicornRepository;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 public class CreateViewModel extends AndroidViewModel {
 
-    private UnicornRepository repository;
+    private final UnicornRepository repository;
 
     public CreateViewModel(@NonNull Application application) {
         super(application);
@@ -19,7 +24,30 @@ public class CreateViewModel extends AndroidViewModel {
     }
 
     public void createUnicorn(Unicorn unicorn) {
-        repository.createUnicorn(unicorn);
+        repository.createUnicorn(unicorn)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Unicorn>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Unicorn unicorn) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 

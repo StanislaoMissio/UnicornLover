@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
         super.onStart();
         init();
         getUnicorns();
+        observable();
     }
 
     @Override
@@ -68,11 +69,13 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     }
 
     private void getUnicorns() {
-        viewModel.getUnicornsResponseLiveData().observe(this, unicorns -> {
-            if (unicorns != null) {
-                unicornsList.addAll(unicorns);
-                adapter.update(unicorns);
-            }
+        viewModel.getAllUnicorns();
+    }
+
+    private void observable() {
+        viewModel.unicornList.observe(this, unicorns -> {
+            adapter.update(unicorns);
+            unicornsList.addAll(unicorns);
         });
     }
 

@@ -8,9 +8,12 @@ import androidx.lifecycle.AndroidViewModel;
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.repository.UnicornRepository;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 public class EditUnicornViewModel extends AndroidViewModel {
 
-    private UnicornRepository repository;
+    private final UnicornRepository repository;
 
     public EditUnicornViewModel(@NonNull Application application) {
         super(application);
@@ -19,7 +22,11 @@ public class EditUnicornViewModel extends AndroidViewModel {
     }
 
     public void editUnicorn(String id, Unicorn unicorn) {
-        repository.editUnicorn(id, unicorn);
+        repository
+                .editUnicorn(id, unicorn)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
 }

@@ -4,6 +4,7 @@ import com.br.unicornlover.model.Unicorn;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,18 +17,18 @@ import retrofit2.http.Path;
 public interface API {
 
     @POST("unicorns")
-    Call<Unicorn> createUnicorn(@Body Unicorn unicorn);
+    Observable<Unicorn> createUnicorn(@Body Unicorn unicorn);
 
     @GET("unicorns")
-    Call<List<Unicorn>> getUnicorns();
+    Observable<List<Unicorn>> getUnicorns();
 
     @GET("unicorns/{id}")
-    Call<Unicorn> getUnicorn(@Path("id") String id);
+    Observable<Unicorn> getUnicorn(@Path("id") String id);
 
     @PUT("unicorns/{id}")
-    Call<ResponseBody> editUnicorn(@Path("id")String id, @Body Unicorn unicorn);
+    Observable<ResponseBody> editUnicorn(@Path("id")String id, @Body Unicorn unicorn);
 
     @DELETE("unicorns/{id}")
-    Call<ResponseBody> deleteUnicorn(@Path("id") String id);
+    Observable<ResponseBody> deleteUnicorn(@Path("id") String id);
 
 }

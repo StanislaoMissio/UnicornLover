@@ -1,8 +1,6 @@
 package com.br.unicornlover.dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -11,6 +9,8 @@ import com.br.unicornlover.model.Unicorn;
 
 import java.util.List;
 
+import io.reactivex.Observable;
+
 @Dao
 public interface UnicornDao {
 
@@ -18,6 +18,6 @@ public interface UnicornDao {
     void insertAll(List<Unicorn> unicorn);
 
     @Query("SELECT * FROM Unicorn")
-    LiveData<List<Unicorn>> getAll();
+    Observable<List<Unicorn>> getAll();
 
 }
