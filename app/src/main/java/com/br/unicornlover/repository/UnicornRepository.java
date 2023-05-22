@@ -36,6 +36,10 @@ public class UnicornRepository {
         return unicornDao.getAll();
     }
 
+    public void cacheUnicornList(List<Unicorn> unicorns) {
+        unicornDao.insertAll(unicorns);
+    }
+
     public Observable<List<Unicorn>> getUnicorns() {
         return api.getUnicorns();
     }

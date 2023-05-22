@@ -1,6 +1,7 @@
 package com.br.unicornlover.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import com.br.unicornlover.viewmodel.MainActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements UnicornAdapter.Callback {
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     private MainActivityViewModel viewModel;
     private UnicornAdapter adapter;
     private final List<Unicorn> unicornsList = new ArrayList<>();
+    private SharedPreferences preferences;
+    private Date lastTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +41,12 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     protected void onStart() {
         super.onStart();
         init();
-        getUnicorns();
+
+        if (new Date().after(lastTime)) {
+            getUnicorns();
+        } else {
+            getCachedUnicorns();
+        }
         observable();
     }
 
@@ -59,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     }
 
     private void init() {
+        preferences = this.getPreferences(MODE_PRIVATE);
+        lastTime = new Date(preferences.getLong("date", 0));
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
@@ -72,11 +83,27 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
         viewModel.getAllUnicorns();
     }
 
+    private void getCachedUnicorns() {
+        viewModel.getCachedUnicorns();
+    }
+
     private void observable() {
         viewModel.unicornList.observe(this, unicorns -> {
+            saveLastTimeToGetRetrofitData();
+            viewModel.cacheUnicornList(unicorns);
             adapter.update(unicorns);
             unicornsList.addAll(unicorns);
         });
+        viewModel.cachedUnicornList.observe(this, unicorns -> {
+            adapter.update(unicorns);
+            unicornsList.addAll(unicorns);
+        });
+    }
+
+    private void saveLastTimeToGetRetrofitData() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("date", (System.currentTimeMillis() + (60 * 1000)));
+        editor.apply();
     }
 
     @Override

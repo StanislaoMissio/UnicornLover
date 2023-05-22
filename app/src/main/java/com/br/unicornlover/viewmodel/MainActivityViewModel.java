@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -27,7 +28,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
     private final UnicornRepository repository;
     public MutableLiveData<List<Unicorn>> unicornList = new MutableLiveData<>();
-
+    public MutableLiveData<List<Unicorn>> cachedUnicornList = new MutableLiveData<>();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -46,7 +47,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     public void getCachedUnicorns() {
         repository
                 .getCachedUnicorns()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Unicorn>>() {
                     @Override
@@ -56,7 +57,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
                     @Override
                     public void onNext(List<Unicorn> unicorns) {
-                        unicornList.setValue(unicorns);
+                        cachedUnicornList.setValue(unicorns);
                     }
 
                     @Override
@@ -69,6 +70,10 @@ public class MainActivityViewModel extends AndroidViewModel {
                         //TODO loading if needed
                     }
                 });
+    }
+
+    public void cacheUnicornList(List<Unicorn> unicorns) {
+        Completable.fromAction(() -> repository.cacheUnicornList(unicorns)).subscribeOn(Schedulers.io()).subscribe();
     }
 
     private Observer<List<Unicorn>> getUnicornsObserver() {
