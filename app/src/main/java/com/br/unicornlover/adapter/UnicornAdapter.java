@@ -35,7 +35,7 @@ public class UnicornAdapter extends RecyclerView.Adapter<UnicornAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.name.setText(unicorns.get(position).getName());
-        holder.age.setText(unicorns.get(position).getAge());
+        holder.age.setText(unicorns.get(position).getAgeString());
         holder.colour.setText(unicorns.get(position).getColour());
         holder.colour.setText(unicorns.get(position).getColour());
         holder.edit.setOnClickListener(view -> {

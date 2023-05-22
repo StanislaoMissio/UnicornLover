@@ -15,7 +15,7 @@ public class CreateViewModel extends AndroidViewModel {
     public CreateViewModel(@NonNull Application application) {
         super(application);
 
-        repository = new UnicornRepository();
+        repository = new UnicornRepository(application.getApplicationContext());
     }
 
     public void createUnicorn(Unicorn unicorn) {

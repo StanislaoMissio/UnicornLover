@@ -1,6 +1,9 @@
 package com.br.unicornlover.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,7 +20,7 @@ public class DetailViewModel extends AndroidViewModel {
     public DetailViewModel(@NonNull Application application) {
         super(application);
 
-        repository = new UnicornRepository();
+        repository = new UnicornRepository(application.getApplicationContext());
     }
 
 

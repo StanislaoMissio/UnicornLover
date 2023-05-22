@@ -1,8 +1,15 @@
 package com.br.unicornlover.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Unicorn {
 
-    private String _id = null;
+    @PrimaryKey
+    @NonNull
+    private String _id;
     private String name = "";
     private int age = 0;
     private String colour = "";
@@ -23,8 +30,12 @@ public class Unicorn {
         this.name = name;
     }
 
-    public String getAge() {
+    public String getAgeString() {
         return Integer.toString(age);
+    }
+
+    public int getAge() {
+        return age;
     }
 
     public void setAge(int age) {

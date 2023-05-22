@@ -37,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
         viewModel.unicornLiveData.observe(this, unicorn -> {
             if (unicorn != null) {
                 name.setText(unicorn.getName());
-                age.setText(unicorn.getAge());
+                age.setText(unicorn.getAgeString());
                 colour.setText(unicorn.getColour());
             }
         });

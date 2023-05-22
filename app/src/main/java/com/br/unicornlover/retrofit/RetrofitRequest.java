@@ -1,8 +1,12 @@
 package com.br.unicornlover.retrofit;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.room.Room;
 
 import com.br.unicornlover.BuildConfig;
+import com.br.unicornlover.R;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -31,5 +35,9 @@ public class RetrofitRequest {
                     .build();
         }
         return retrofit;
+    }
+
+    public static AppDatabase provideDatabase(Context context) {
+        return Room.databaseBuilder(context, AppDatabase.class, context.getString(R.string.app_name)).build();
     }
 }

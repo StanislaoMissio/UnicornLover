@@ -1,13 +1,17 @@
 package com.br.unicornlover.repository;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.br.unicornlover.dao.UnicornDao;
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.retrofit.API;
+import com.br.unicornlover.retrofit.AppDatabase;
 import com.br.unicornlover.retrofit.RetrofitRequest;
 
 import java.util.List;
@@ -20,9 +24,16 @@ import retrofit2.Response;
 public class UnicornRepository {
 
     private final API api;
+    private final UnicornDao unicornDao;
 
-    public UnicornRepository() {
+    public UnicornRepository(Context context) {
         api = RetrofitRequest.getRetrofitInstance().create(API.class);
+        AppDatabase appDatabase = RetrofitRequest.provideDatabase(context);
+        unicornDao = appDatabase.unicornDao();
+    }
+
+    public LiveData<List<Unicorn>> getRoomUnicornList() {
+        return unicornDao.getAll();
     }
 
     public LiveData<List<Unicorn>> getUnicorns() {
@@ -32,12 +43,13 @@ public class UnicornRepository {
             public void onResponse(@NonNull Call<List<Unicorn>> call, @NonNull Response<List<Unicorn>> response) {
                 if (response.isSuccessful()) {
                     data.setValue(response.body());
+                    unicornDao.insertAll(response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<Unicorn>> call, @NonNull Throwable t) {
-                data.setValue(null);
+                data.setValue(getRoomUnicornList().getValue());
             }
         });
         return data;

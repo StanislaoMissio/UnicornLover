@@ -22,7 +22,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField 'String', 'BASE_URL', '\"https://crudcrud.com/api/a727a1ef056d433aab31d40d1ecd69d5/\"'
+            buildConfigField 'String', 'BASE_URL', '\"https://crudcrud.com/api/1978ce495cd7478a882d197eb21b76a5/\"'
         }
     }
     compileOptions {
@@ -45,6 +45,8 @@ dependencies {
     implementation 'io.reactivex:rxjava:1.1.6'
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation "androidx.room:room-runtime:2.4.1"
+    annotationProcessor "androidx.room:room-compiler:2.4.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

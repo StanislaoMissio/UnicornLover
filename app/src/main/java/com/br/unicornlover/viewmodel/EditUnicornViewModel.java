@@ -15,7 +15,7 @@ public class EditUnicornViewModel extends AndroidViewModel {
     public EditUnicornViewModel(@NonNull Application application) {
         super(application);
 
-        repository = new UnicornRepository();
+        repository = new UnicornRepository(application.getApplicationContext());
     }
 
     public void editUnicorn(String id, Unicorn unicorn) {
