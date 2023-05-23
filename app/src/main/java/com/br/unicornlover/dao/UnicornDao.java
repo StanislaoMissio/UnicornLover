@@ -9,15 +9,20 @@ import com.br.unicornlover.model.Unicorn;
 
 import java.util.List;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 @Dao
 public interface UnicornDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ROLLBACK)
     void insertAll(List<Unicorn> unicorn);
 
+    @Query("DELETE FROM Unicorn")
+    void deleteAll();
+
     @Query("SELECT * FROM Unicorn")
-    Observable<List<Unicorn>> getAll();
+    Single<List<Unicorn>> getAll();
 
 }

@@ -1,42 +1,34 @@
 package com.br.unicornlover.view;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.br.unicornlover.R;
+import com.br.unicornlover.databinding.ActivityCreateUnicornBinding;
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.viewmodel.CreateViewModel;
 
 public class CreateUnicornActivity extends AppCompatActivity {
 
-    private EditText name;
-    private EditText age;
-    private EditText colour;
+    private final Unicorn unicorn = new Unicorn();
     private CreateViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_unicorn);
-
-        name = findViewById(R.id.name);
-        colour = findViewById(R.id.colour);
-        age = findViewById(R.id.age);
-        Button submit = findViewById(R.id.submit);
-
+        ActivityCreateUnicornBinding binding
+                = DataBindingUtil.setContentView(this, R.layout.activity_create_unicorn);
         viewModel = new ViewModelProvider(this).get(CreateViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setUnicorn(unicorn);
+    }
 
-        submit.setOnClickListener(view -> {
-            Unicorn unicorn = new Unicorn();
-            unicorn.setName(name.getText().toString());
-            unicorn.setColour(colour.getText().toString());
-            unicorn.setAge(Integer.parseInt(age.getText().toString()));
-            viewModel.createUnicorn(unicorn);
-        });
+    public void onClick(View view) {
+        viewModel.createUnicorn(unicorn);
     }
 }

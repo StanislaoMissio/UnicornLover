@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.repository.UnicornRepository;
@@ -16,6 +17,8 @@ import io.reactivex.schedulers.Schedulers;
 public class CreateViewModel extends AndroidViewModel {
 
     private final UnicornRepository repository;
+    public final MutableLiveData<Unicorn> unicornMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
     public CreateViewModel(@NonNull Application application) {
         super(application);
@@ -24,6 +27,7 @@ public class CreateViewModel extends AndroidViewModel {
     }
 
     public void createUnicorn(Unicorn unicorn) {
+        isLoading.setValue(true);
         repository.createUnicorn(unicorn)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -35,7 +39,7 @@ public class CreateViewModel extends AndroidViewModel {
 
                     @Override
                     public void onNext(Unicorn unicorn) {
-
+                        unicornMutableLiveData.setValue(unicorn);
                     }
 
                     @Override
@@ -45,7 +49,7 @@ public class CreateViewModel extends AndroidViewModel {
 
                     @Override
                     public void onComplete() {
-
+                        isLoading.setValue(false);
                     }
                 });
     }

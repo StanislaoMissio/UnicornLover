@@ -3,18 +3,18 @@ package com.br.unicornlover.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.br.unicornlover.R;
 import com.br.unicornlover.adapter.UnicornAdapter;
+import com.br.unicornlover.databinding.ActivityMainBinding;
 import com.br.unicornlover.model.Unicorn;
 import com.br.unicornlover.viewmodel.MainActivityViewModel;
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements UnicornAdapter.Callback {
 
     private MainActivityViewModel viewModel;
-    private UnicornAdapter adapter;
+    private final UnicornAdapter adapter = new UnicornAdapter(Collections.emptyList(), this);
     private final List<Unicorn> unicornsList = new ArrayList<>();
     private SharedPreferences preferences;
     private Date lastTime;
@@ -34,19 +34,14 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        init();
-
-        if (new Date().after(lastTime)) {
-            getUnicorns();
-        } else {
-            getCachedUnicorns();
-        }
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(this);
+        setSupportActionBar(binding.toolbar);
+        initSharedPreferences();
+        binding.unicornList.setAdapter(adapter);
+        getUnicorns(new Date().after(lastTime));
         observable();
     }
 
@@ -67,24 +62,13 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
         return true;
     }
 
-    private void init() {
+    private void initSharedPreferences() {
         preferences = this.getPreferences(MODE_PRIVATE);
         lastTime = new Date(preferences.getLong("date", 0));
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        viewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
-        adapter = new UnicornAdapter(Collections.emptyList(), this);
-        RecyclerView recyclerView = findViewById(R.id.unicorn_list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void getUnicorns() {
-        viewModel.getAllUnicorns();
-    }
-
-    private void getCachedUnicorns() {
-        viewModel.getCachedUnicorns();
+    private void getUnicorns(boolean shouldCallFromApi) {
+        viewModel.getAllUnicorns(!shouldCallFromApi);
     }
 
     private void observable() {
@@ -92,11 +76,6 @@ public class MainActivity extends AppCompatActivity implements UnicornAdapter.Ca
             saveLastTimeToGetRetrofitData();
             viewModel.cacheUnicornList(unicorns);
             adapter.update(unicorns);
-            unicornsList.addAll(unicorns);
-        });
-        viewModel.cachedUnicornList.observe(this, unicorns -> {
-            adapter.update(unicorns);
-            unicornsList.addAll(unicorns);
         });
     }
 

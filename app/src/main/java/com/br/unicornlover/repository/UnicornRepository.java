@@ -1,11 +1,6 @@
 package com.br.unicornlover.repository;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.br.unicornlover.dao.UnicornDao;
 import com.br.unicornlover.model.Unicorn;
@@ -16,10 +11,8 @@ import com.br.unicornlover.retrofit.RetrofitRequest;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UnicornRepository {
 
@@ -32,16 +25,17 @@ public class UnicornRepository {
         unicornDao = appDatabase.unicornDao();
     }
 
-    public Observable<List<Unicorn>> getCachedUnicorns(){
-        return unicornDao.getAll();
-    }
-
     public void cacheUnicornList(List<Unicorn> unicorns) {
+        unicornDao.deleteAll();
         unicornDao.insertAll(unicorns);
     }
 
     public Observable<List<Unicorn>> getUnicorns() {
         return api.getUnicorns();
+    }
+
+    public Single<List<Unicorn>> getCachedUnicorns() {
+        return unicornDao.getAll();
     }
 
     public Observable<ResponseBody> deleteUnicorn(String id) {
