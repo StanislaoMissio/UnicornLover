@@ -26,7 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            buildConfigField 'String', 'BASE_URL', '\"https://crudcrud.com/api/1978ce495cd7478a882d197eb21b76a5/\"'
+            buildConfigField 'String', 'BASE_URL', '\"https://crudcrud.com/api/b401f36e826c48f8a2d4ca06704648be/\"'
         }
     }
     compileOptions {
