@@ -117,6 +117,7 @@ public class MainActivityViewModel extends AndroidViewModel {
 
                     @Override
                     public void onNext(ResponseBody responseBody) {
+                        getAllUnicorns(true);
                     }
 
                     @Override
